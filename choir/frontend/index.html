@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HYSSOP CHOIR | Rwanda Gospel</title>
+    <meta name="description" content="Hyssop Choir Rwanda — Gospel music, worship, concerts and ministry." />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <style>
+        /* ── RESET & BASE ── */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body {
+            background: #050605;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+        a { color:inherit; text-decoration:none; }
+        img { display:block; max-width:100%; }
+        button, input, textarea { font-family:inherit; }
+        :root {
+            --green: #173b27;
+            --green-dark: #08130d;
+            --green2: #0d2619;
+            --gold: #d7ad45;
+            --gold-light: #f2d477;
+            --black: #050605;
+            --dark: #0a0d0b;
+            --gray: #9c9f9b;
+            --border: rgba(255, 255, 255, .09);
+        }
+
+        /* ── CONTAINER ── */
+        .container { width: min(92%, 1200px); margin: auto; }
+
+        /* ── BACK TO TOP ── */
+        .back-to-top {
+            position: fixed; bottom:30px; left:30px; z-index:999;
+            width:55px; height:55px; border-radius:50%;
+            border:2px solid rgba(215,173,69,.4);
+            background:rgba(4,8,6,.85); backdrop-filter:blur(12px);
+            color:var(--gold); font-size:22px;
+            cursor:pointer; display:grid; place-items:center;
+            transition:.4s cubic-bezier(.2,.8,.2,1);
+            opacity:0; transform:scale(0.5) translateY(20px);
+            pointer-events:none; box-shadow:0 8px 30px rgba(0,0,0,.4);
+        }
+        .back-to-top.visible { opacity:1; transform:scale(1) translateY(0); pointer-events:auto; }
+        .back-to-top:hover { background:var(--gold); color:#111; transform:scale(1.1) translateY(-3px); box-shadow:0 12px 40px rgba(215,173,69,.3); }
+        .back-to-top .arrow { display:block; line-height:1; transition:.3s; }
+        .back-to-top:hover .arrow { transform:translateY(-3px); }
+
+        /* ── HEADER ── */
+        header {
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            background:rgba(4,8,6,.3); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+            border-bottom:1px solid rgba(255,255,255,.08); transition:.35s;
+        }
+        header.scrolled { background:rgba(4,8,6,.6); box-shadow:0 15px 50px rgba(0,0,0,.4); }
+        .navbar { min-height:82px; display:flex; align-items:center; justify-content:space-between; }
+        .logo { display:flex; align-items:center; gap:12px; }
+        .logo-image { width:48px; height:48px; border-radius:50%; object-fit:cover; border:1px solid rgba(215,173,69,.65); box-shadow:0 0 20px rgba(215,173,69,.15); transition:.4s; }
+        .logo:hover .logo-image { transform:scale(1.06) rotate(3deg); }
+        .logo-name { font-size:17px; font-weight:900; letter-spacing:2px; color:#fff; }
+        .logo-name span { display:block; color:var(--gold); font-size:9px; letter-spacing:3px; margin-top:3px; }
+        .nav-right { display:flex; align-items:center; gap:20px; }
+        .nav-links { display:flex; gap:30px; list-style:none; }
+        .nav-links a { color:#eee; font-size:13px; font-weight:700; position:relative; transition:.3s; }
+        .nav-links a::after { content:""; position:absolute; left:0; bottom:-8px; width:0; height:2px; background:var(--gold); transition:.3s; }
+        .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+        .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+        .header-actions { display:flex; align-items:center; gap:10px; }
+        .notification-btn {
+            width:43px; height:43px; border-radius:50%;
+            border:1px solid rgba(215,173,69,.35);
+            background:rgba(0,0,0,.35); color:var(--gold);
+            cursor:pointer; display:grid; place-items:center; transition:.3s;
+            font-size:17px;
+        }
+        .notification-btn:hover { background:var(--gold); color:#111; transform:translateY(-3px); }
+        .notification-wrapper { position:relative; }
+        .notification-btn { position:relative; }
+        .notification-count {
+            position:absolute; top:-5px; right:-4px;
+            min-width:18px; height:18px; padding:0 5px; border-radius:20px;
+            display:flex; align-items:center; justify-content:center;
+            background:#d73535; color:#fff; font-size:9px; font-weight:900;
+            border:2px solid #050605;
+            opacity:0; transform:scale(0); transition:.25s;
+        }
+        .notification-count.show { opacity:1; transform:scale(1); }
+
+        /* ── NOTIFICATION PANEL ── */
+        .notification-panel {
+            position:absolute; top:57px; right:0;
+            width:320px; max-height:420px; overflow-y:auto;
+            background:#0b0e0c; border:1px solid rgba(215,173,69,.3);
+            border-radius:16px; box-shadow:0 25px 70px rgba(0,0,0,.5);
+            opacity:0; visibility:hidden; transform:translateY(-8px);
+            transition:.25s; z-index:100;
+        }
+        .notification-panel.open { opacity:1; visibility:visible; transform:translateY(0); }
+        .notification-panel-title {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 16px; border-bottom:1px solid var(--border);
+            font-size:13px; font-weight:600; position:sticky; top:0;
+            background:#0b0e0c; border-radius:16px 16px 0 0; z-index:2;
+        }
+        .notification-panel-title .notif-status {
+            font-size:10px; padding:2px 10px; border-radius:12px;
+            background:rgba(46,204,113,.15); color:#2ecc71;
+            display:flex; align-items:center; gap:4px;
+        }
+        .notification-panel-title .notif-status .dot {
+            width:6px; height:6px; border-radius:50%;
+            background:#2ecc71; animation:pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+        .notif-list { padding:4px 0; }
+        .notif-item {
+            display:flex; gap:12px; padding:10px 16px;
+            border-bottom:1px solid rgba(255,255,255,0.04);
+            transition:background .2s;
+        }
+        .notif-item:hover { background:rgba(255,255,255,0.02); }
+        .notif-item.unread {
+            background:rgba(215,173,69,0.04);
+            border-left:3px solid #d7ad45;
+        }
+        .notif-item .notif-icon {
+            flex:none; width:32px; height:32px; border-radius:50%;
+            display:grid; place-items:center;
+            background:rgba(215,173,69,0.12); color:#d7ad45; font-size:14px;
+        }
+        .notif-item .notif-content { flex:1; min-width:0; }
+        .notif-item .notif-content strong {
+            display:block; font-size:13px; font-weight:600; margin-bottom:2px;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+        .notif-item .notif-content p {
+            font-size:12px; color:#999; margin:0; line-height:1.4;
+            display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+        }
+        .notif-item .notif-time {
+            font-size:10px; color:#666; margin-top:4px;
+        }
+        .notif-item .notif-actions {
+            display:flex; gap:4px; margin-top:4px; flex-wrap:wrap;
+        }
+        .notif-item .notif-actions button {
+            background:none; border:none; color:#888;
+            font-size:10px; cursor:pointer; padding:2px 8px;
+            border-radius:12px; transition:.2s;
+        }
+        .notif-item .notif-actions button:hover {
+            color:#d7ad45; background:rgba(215,173,69,0.08);
+        }
+        .notif-empty {
+            padding:30px 20px; text-align:center; color:#888; font-size:13px;
+        }
+        .notif-actions-all {
+            padding:8px 16px; border-top:1px solid var(--border);
+            text-align:right; position:sticky; bottom:0;
+            background:#0b0e0c; border-radius:0 0 16px 16px;
+        }
+        .notif-actions-all button {
+            background:none; border:none; color:#d7ad45;
+            font-size:12px; cursor:pointer; padding:4px 12px;
+            border-radius:20px; transition:.2s;
+        }
+        .notif-actions-all button:hover { background:rgba(215,173,69,0.08); }
+
+        /* ── HERO ── */
+        .hero {
+            min-height:100vh; position:relative; overflow:hidden;
+            display:flex; align-items:center; background:#020403;
+        }
+        .hero-slides { position:absolute; inset:0; z-index:0; }
+        .hero-slide {
+            position:absolute; inset:-5%;
+            background-size:cover; background-position:center;
+            opacity:0; transform:scale(1.1);
+            transition:opacity 1.2s,transform 6s;
+            filter:saturate(1.08) contrast(1.06);
+        }
+        .hero-slide.active { opacity:1; transform:scale(1); }
+        .hero-slide:nth-child(1) { background-image:url("https://i.postimg.cc/SQL782cf/Gemini-Generated-Image-u7s6pyu7s6pyu7s6-(1).jpg"); }
+        .hero-slide:nth-child(2) { background-image:url("https://i.postimg.cc/vTXVKnvf/Gemini-Generated-Image-7uhrsm7uhrsm7uhr-(1).jpg"); }
+        .hero-slide:nth-child(3) { background-image:url("https://i.postimg.cc/BQYFcx6R/Gemini-Generated-Image-1ermuh1ermuh1erm-(1).jpg"); }
+        .hero-slide:nth-child(4) { background-image:url("https://i.postimg.cc/wBJspZVH/Gemini-Generated-Image-4e32sw4e32sw4e32-(1).jpg"); }
+        .hero-slide:nth-child(5) { background-image:url("https://i.postimg.cc/zfn3MWzb/Gemini-Generated-Image-9kkvpi9kkvpi9kkv.jpg"); }
+        .hero-slide:nth-child(6) { background-image:url("https://i.postimg.cc/SQL782cf/Gemini-Generated-Image-u7s6pyu7s6pyu7s6-(1).jpg"); }
+        .hero-slide:nth-child(7) { background-image:url("https://i.postimg.cc/vTXVKnvf/Gemini-Generated-Image-7uhrsm7uhrsm7uhr-(1).jpg"); }
+        .hero-slides::after {
+            content:""; position:absolute; inset:0;
+            background:linear-gradient(90deg,rgba(2,5,3,.96) 0%,rgba(2,5,3,.78) 30%,rgba(2,5,3,.38) 65%,rgba(2,5,3,.72) 100%);
+            pointer-events:none;
+        }
+        .hero-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(transparent 40%,rgba(0,0,0,.9)); }
+        .hero::before {
+            content:""; position:absolute; width:650px; height:650px;
+            left:-320px; top:8%;
+            background:radial-gradient(circle,rgba(215,173,69,.2),transparent 65%);
+            filter:blur(30px); z-index:2; pointer-events:none;
+            animation:heroLight 8s ease-in-out infinite;
+        }
+        @keyframes heroLight { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(80px,30px) scale(1.15)} }
+        .hero-content {
+            position:relative; z-index:5; max-width:760px; padding-top:70px;
+            animation:heroContent 1s ease both;
+        }
+        @keyframes heroContent { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+        .eyebrow { color:var(--gold); font-size:12px; font-weight:800; letter-spacing:5px; text-transform:uppercase; margin-bottom:22px; }
+        .hero h1 { font-family:Georgia,serif; font-size:clamp(55px,8vw,105px); line-height:.92; margin-bottom:28px; }
+        .hero h1 span { color:var(--gold); }
+        .language-line { min-height:35px; color:var(--gold-light); font-size:18px; font-weight:700; margin-bottom:17px; }
+        .cursor { display:inline-block; width:2px; height:20px; background:var(--gold); margin-left:4px; vertical-align:-3px; animation:blink .7s infinite; }
+        @keyframes blink { 50%{opacity:0} }
+        .hero-description { max-width:620px; color:#d1d4d1; font-size:18px; line-height:1.8; margin-bottom:35px; }
+        .buttons { display:flex; flex-wrap:wrap; gap:14px; }
+        .btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:9px;
+            padding:15px 25px; border-radius:50px; font-size:13px; font-weight:800;
+            transition:.3s; border:none; cursor:pointer;
+        }
+        .btn-gold { background:var(--gold); color:#111; box-shadow:0 10px 35px rgba(215,173,69,.2); }
+        .btn-gold:hover { background:var(--gold-light); transform:translateY(-4px) scale(1.02); }
+        .btn-outline { border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.05); backdrop-filter:blur(10px); }
+        .btn-outline:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-4px); }
+        .hero-progress {
+            position:absolute; z-index:10; right:45px; bottom:42px;
+            width:160px; height:3px; overflow:hidden;
+            background:rgba(255,255,255,.18); border-radius:20px;
+        }
+        .hero-progress-bar { width:0; height:100%; background:var(--gold); }
+        .hero-song-label {
+            position:absolute; z-index:10; left:50%; bottom:40px;
+            transform:translateX(-50%);
+            padding:10px 18px; border-radius:30px;
+            background:rgba(0,0,0,.48); border:1px solid rgba(255,255,255,.1);
+            backdrop-filter:blur(12px); color:#ddd; font-size:11px; letter-spacing:1.5px;
+            white-space:nowrap;
+        }
+
+        /* ── STATS ── */
+        .stats { position:relative; z-index:20; margin-top:-40px; }
+        .stats-grid {
+            display:grid; grid-template-columns:repeat(4,1fr);
+            background:#0b0e0c; border:1px solid var(--border); border-radius:20px;
+            overflow:hidden; box-shadow:0 25px 70px rgba(0,0,0,.35);
+        }
+        .stat { padding:30px; text-align:center; border-right:1px solid var(--border); transition:.3s; }
+        .stat:hover { background:rgba(215,173,69,.04); }
+        .stat:last-child { border-right:0; }
+        .stat strong { display:block; color:var(--gold); font-size:28px; margin-bottom:7px; }
+        .stat span { color:#888; font-size:12px; }
+
+        section:not(.hero) { padding:110px 0; }
+        .section-title { max-width:700px; margin-bottom:45px; }
+        .section-title.center { text-align:center; margin-left:auto; margin-right:auto; }
+        .section-title small { color:var(--gold); font-size:11px; font-weight:bold; letter-spacing:4px; }
+        .section-title h2 { font-family:Georgia,serif; font-size:clamp(40px,5vw,62px); line-height:1; margin:12px 0 18px; }
+        .section-title p { color:var(--gray); line-height:1.8; }
+
+        /* ── VIDEOS ── */
+        .videos {
+            background:radial-gradient(circle at 10% 10%,rgba(23,59,39,.45),transparent 35%),#030403;
+            position:relative; overflow:hidden;
+        }
+        .videos::before {
+            content:''; position:absolute; top:-40%; right:-20%;
+            width:600px; height:600px;
+            background:radial-gradient(circle,rgba(215,173,69,.05),transparent 70%);
+            border-radius:50%; pointer-events:none;
+        }
+        .videos::after {
+            content:''; position:absolute; bottom:-30%; left:-15%;
+            width:500px; height:500px;
+            background:radial-gradient(circle,rgba(215,173,69,.04),transparent 70%);
+            border-radius:50%; pointer-events:none;
+        }
+        .video-grid {
+            display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
+            position:relative; z-index:1;
+        }
+        .video-card {
+            background:#0a0d0b; border:1px solid rgba(255,255,255,.06); border-radius:20px;
+            overflow:hidden; transition:all .45s cubic-bezier(.22,1,.36,1);
+            cursor:pointer; position:relative; box-shadow:0 8px 30px rgba(0,0,0,.25);
+            backdrop-filter:blur(2px);
+        }
+        .video-card:hover {
+            transform:translateY(-12px) scale(1.01);
+            border-color:rgba(215,173,69,.6);
+            box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 1px rgba(215,173,69,.15);
+        }
+        .video-thumbnail { position:relative; aspect-ratio:16/9; overflow:hidden; background:#020302; }
+        .video-thumbnail img { width:100%; height:100%; object-fit:cover; transition:transform .7s cubic-bezier(.22,1,.36,1); }
+        .video-card:hover .video-thumbnail img { transform:scale(1.08); }
+        .video-thumbnail::after {
+            content:''; position:absolute; inset:0;
+            background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.55) 100%);
+            pointer-events:none; transition:opacity .4s;
+        }
+        .video-card:hover .video-thumbnail::after { opacity:.7; }
+        .play {
+            position:absolute; z-index:2; top:50%; left:50%; transform:translate(-50%,-50%);
+            width:70px; height:70px; display:grid; place-items:center; border-radius:50%;
+            background:rgba(215,173,69,.92); color:#111; font-size:24px;
+            box-shadow:0 0 0 0 rgba(215,173,69,.4);
+            transition:all .4s cubic-bezier(.22,1,.36,1); backdrop-filter:blur(4px);
+        }
+        .play::before {
+            content:''; position:absolute; inset:-6px; border-radius:50%;
+            border:2px solid rgba(215,173,69,.25);
+            animation:playPulse 2s ease-out infinite;
+        }
+        @keyframes playPulse { 0%{transform:scale(1);opacity:1} 100%{transform:scale(1.6);opacity:0} }
+        .video-card:hover .play { transform:translate(-50%,-50%) scale(1.12); background:var(--gold-light); box-shadow:0 0 40px rgba(215,173,69,.45); }
+        .video-card:hover .play::before { border-color:rgba(215,173,69,.5); }
+        .video-info { padding:22px 24px 26px; position:relative; background:linear-gradient(180deg,rgba(10,13,11,.95),#0a0d0b); }
+        .video-info h3 { font-size:19px; font-weight:800; letter-spacing:-.3px; margin-bottom:5px; color:#fff; transition:color .3s; }
+        .video-card:hover .video-info h3 { color:var(--gold-light); }
+        .video-info p { color:#888; font-size:12px; letter-spacing:.3px; display:flex; align-items:center; gap:8px; }
+        .video-info p i { color:var(--gold); font-size:10px; opacity:.6; }
+        .video-badge {
+            position:absolute; top:14px; right:14px; z-index:3;
+            padding:4px 12px; border-radius:20px;
+            background:rgba(0,0,0,.6); backdrop-filter:blur(10px);
+            border:1px solid rgba(215,173,69,.2);
+            color:var(--gold-light); font-size:8px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase;
+            pointer-events:none; transition:.3s;
+        }
+        .video-card:hover .video-badge { background:rgba(215,173,69,.15); border-color:var(--gold); }
+        .view-more-wrapper { text-align:center; margin-top:60px; position:relative; z-index:1; }
+        .view-more-btn {
+            display:inline-flex; align-items:center; gap:10px;
+            padding:14px 32px; border-radius:50px;
+            background:transparent; border:2px solid var(--gold); color:var(--gold);
+            font-size:13px; font-weight:700; letter-spacing:1.2px;
+            transition:all .35s ease; text-transform:uppercase; cursor:pointer; backdrop-filter:blur(4px);
+        }
+        .view-more-btn i { font-size:16px; transition:.3s; }
+        .view-more-btn:hover { background:var(--gold); color:#111; transform:translateY(-4px) scale(1.02); box-shadow:0 15px 40px rgba(215,173,69,.25); }
+        .view-more-btn:hover i { transform:scale(1.15); }
+
+        /* ── ABOUT ── */
+        .about {
+            position:relative;
+            background:url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600&q=80') no-repeat center center / cover;
+            background-attachment:fixed;
+        }
+        .about::before { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.6); z-index:0; }
+        .about .container { position:relative; z-index:1; }
+        .about-grid {
+            display:grid; grid-template-columns:1fr 1fr; gap:50px;
+            align-items:center;
+            background:rgba(255,255,255,0.05); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+            border:1px solid rgba(255,255,255,0.1); border-radius:30px;
+            padding:40px; box-shadow:0 20px 60px rgba(0,0,0,0.4),0 0 40px rgba(215,173,69,0.05);
+        }
+        .about-photo { position:relative; height:450px; overflow:hidden; border-radius:20px; }
+        .about-slide { position:absolute; inset:0; opacity:0; transform:scale(1.08) rotate(1deg); transition:opacity 1.2s,transform 5s; }
+        .about-slide.active { opacity:1; transform:scale(1) rotate(0); }
+        .about-slide img { width:100%; height:100%; object-fit:cover; border-radius:20px; border:1px solid rgba(215,173,69,0.3); box-shadow:0 30px 80px rgba(0,0,0,0.4); }
+        .about-photo::after { content:""; position:absolute; inset:0; border-radius:20px; background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,0.55)); pointer-events:none; }
+        .about-photo::before {
+            content:"HYSSOP CHOIR"; position:absolute; z-index:4;
+            left:25px; bottom:25px; padding:9px 15px; border-radius:30px;
+            background:rgba(0,0,0,0.48); border:1px solid rgba(215,173,69,0.4);
+            color:var(--gold-light); font-size:10px; letter-spacing:2px; backdrop-filter:blur(10px);
+        }
+        .about-text { background:transparent; backdrop-filter:none; border:none; padding:0; box-shadow:none; }
+        .about-text h2 { font-family:Georgia,serif; font-size:clamp(42px,5vw,62px); line-height:1.05; margin:12px 0 22px; }
+        .about-text h2 span { color:var(--gold); }
+        .about-text p { color:var(--gray); line-height:1.9; margin-bottom:18px; }
+        .quote { border-left:3px solid var(--gold); padding:20px; background:rgba(215,173,69,0.06); color:#ddd; line-height:1.7; margin:28px 0; }
+
+        /* ── NEWS SECTION ── */
+        .news {
+            background:radial-gradient(circle at 10% 10%,rgba(23,59,39,.3),transparent 35%),#030403;
+            position:relative; overflow:hidden;
+        }
+        .news::before {
+            content:''; position:absolute; bottom:-30%; right:-15%;
+            width:500px; height:500px;
+            background:radial-gradient(circle,rgba(215,173,69,.04),transparent 70%);
+            border-radius:50%; pointer-events:none;
+        }
+        .news .news-grid {
+            display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+            gap:30px; margin-top:20px; position:relative; z-index:1;
+        }
+        .news .news-item {
+            background:rgba(255,255,255,0.04); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+            border:1px solid rgba(255,255,255,0.06); border-radius:20px;
+            overflow:hidden; transition:all .4s cubic-bezier(.22,1,.36,1);
+            box-shadow:0 8px 30px rgba(0,0,0,.2);
+        }
+        .news .news-item:hover { border-color:rgba(215,173,69,0.3); transform:translateY(-6px); box-shadow:0 20px 60px rgba(0,0,0,.4); }
+        .news .news-item img { width:100%; height:200px; object-fit:cover; background:#111; border-bottom:1px solid rgba(255,255,255,0.04); }
+        .news .news-item .body { padding:22px 24px 26px; }
+        .news .news-item .body h3 { font-size:20px; font-weight:700; margin-bottom:8px; color:#fff; transition:color .3s; }
+        .news .news-item:hover .body h3 { color:var(--gold-light); }
+        .news .news-item .body p { color:#aaa; font-size:14px; line-height:1.7; margin-bottom:12px; }
+        .news .news-item .body .date { font-size:12px; color:#666; display:flex; align-items:center; gap:6px; }
+        .news .news-item .body .date i { color:var(--gold); font-size:11px; opacity:.6; }
+        .news .empty { text-align:center; color:#888; padding:60px 20px; font-size:16px; }
+
+        /* ── SIDEBAR ── */
+        .news-sidebar-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 40px;
+            align-items: start;
+        }
+        .sidebar {
+            position: sticky;
+            top: 120px;
+        }
+        .sidebar-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .sidebar-card h3 {
+            font-family: Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .sidebar-card h3 span { color: #d7ad45; }
+        .sidebar-card .sub {
+            color: #8a8f8c;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .sidebar-card .social-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        .sidebar-card .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #ddd;
+            font-size: 22px;
+            transition: all 0.3s ease;
+        }
+        .sidebar-card .social-icons a:hover {
+            background: rgba(215,173,69,0.15);
+            border-color: #d7ad45;
+            color: #d7ad45;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(215,173,69,0.15);
+        }
+        .sidebar-card .social-icons a .label {
+            display: none;
+        }
+        .sidebar-card .social-icons .tooltip {
+            position: relative;
+        }
+        /* Platform-specific hover colors */
+        .sidebar-card .social-icons a:hover .fa-spotify { color: #1DB954; }
+        .sidebar-card .social-icons a:hover .fa-apple { color: #fff; }
+        .sidebar-card .social-icons a:hover .fa-facebook { color: #1877F2; }
+        .sidebar-card .social-icons a:hover .fa-music { color: #FF6B6B; }
+        .sidebar-card .social-icons a:hover .fa-globe { color: #FFA500; }
+
+        /* Light mode for sidebar */
+        body.light-mode .sidebar-card {
+            background: rgba(255,255,255,0.7);
+            border-color: rgba(0,0,0,0.06);
+        }
+        body.light-mode .sidebar-card .social-icons a {
+            background: rgba(0,0,0,0.04);
+            border-color: rgba(0,0,0,0.06);
+            color: #333;
+        }
+        body.light-mode .sidebar-card .social-icons a:hover {
+            background: rgba(184,148,46,0.1);
+            border-color: #b8942e;
+            color: #b8942e;
+        }
+
+        /* ── CONTACT ── */
+        .contact, .identity {
+            position:relative;
+            background:url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600&q=80') no-repeat center center / cover;
+            background-attachment:fixed;
+        }
+        .contact::before, .identity::before { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.55); z-index:0; }
+        .contact .container, .identity .container { position:relative; z-index:1; }
+        .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+        .contact-intro, .contact-form-box {
+            background:rgba(10,13,11,0.35); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.15); border-radius:25px; padding:40px; transition:background .3s;
+        }
+        .contact-intro h2 { font-family:Georgia,serif; font-size:clamp(40px,5vw,60px); line-height:1; margin:15px 0 20px; }
+        .contact-intro h2 span { color:var(--gold); }
+        .contact-intro p { color:#ddd; line-height:1.8; margin-bottom:25px; }
+        .contact-cards { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+        .contact-card {
+            padding:22px; background:rgba(0,0,0,0.25); backdrop-filter:blur(4px);
+            border:1px solid rgba(255,255,255,0.08); border-radius:18px; transition:.35s;
+        }
+        .contact-card:hover { transform:translateY(-5px); border-color:rgba(215,173,69,.45); }
+        .contact-card-icon { width:43px; height:43px; display:grid; place-items:center; border-radius:50%; background:rgba(215,173,69,.15); color:var(--gold); margin-bottom:15px; }
+        .contact-card small { display:block; color:#ccc; font-size:9px; letter-spacing:2px; text-transform:uppercase; margin-bottom:7px; }
+        .contact-card strong { display:block; font-size:14px; line-height:1.5; color:#fff; }
+        .contact-card a:hover { color:var(--gold); }
+        .contact-actions { margin-top:25px; display:flex; flex-wrap:wrap; gap:10px; }
+        .contact-action {
+            display:inline-flex; align-items:center; gap:8px;
+            padding:12px 16px; border-radius:30px;
+            font-size:11px; font-weight:800;
+            border:1px solid rgba(255,255,255,.15);
+            background:rgba(255,255,255,.05); transition:.3s;
+        }
+        .contact-action:hover { background:var(--gold); color:#111; border-color:var(--gold); }
+        .contact-form-box h3 { font-family:Georgia,serif; font-size:32px; margin-bottom:8px; }
+        .contact-form-box > p { color:#ddd; font-size:13px; line-height:1.7; margin-bottom:25px; }
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+        .field { display:flex; flex-direction:column; gap:7px; }
+        .field.full { grid-column:1/-1; }
+        .field label { color:#ccc; font-size:10px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; }
+        .field input, .field textarea {
+            width:100%; border:1px solid rgba(255,255,255,.15);
+            background:rgba(0,0,0,0.2); color:#fff;
+            border-radius:12px; padding:14px; outline:none; transition:.3s; font-size:13px;
+        }
+        .field input:focus, .field textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(215,173,69,.08); }
+        .field textarea { min-height:140px; resize:vertical; }
+        .form-submit { margin-top:18px; }
+
+        /* ── IDENTITY ── */
+        .identity { text-align:center; }
+        .ministry-logo {
+            width:150px; height:150px; margin:0 auto 28px; padding:7px;
+            object-fit:cover; border-radius:50%;
+            border:2px solid rgba(215,173,69,.65);
+            background:#050605;
+            box-shadow:0 0 0 8px rgba(215,173,69,.05),0 20px 60px rgba(0,0,0,.55),0 0 45px rgba(215,173,69,.15);
+            animation:logoFloat 5s ease-in-out infinite;
+        }
+        @keyframes logoFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .identity h2 { font-family:Georgia,serif; font-size:48px; }
+        .identity h2 span { color:var(--gold); }
+        .identity p { color:#ddd; margin-top:15px; letter-spacing:2px; }
+        .identity-buttons { margin-top:30px; display:flex; justify-content:center; flex-wrap:wrap; gap:12px; }
+
+        /* ── FOOTER ── */
+        footer {
+            position:relative;
+            background:url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600&q=80') no-repeat center center / cover;
+            background-attachment:fixed;
+            border-top:1px solid rgba(255,255,255,0.08);
+            padding:55px 0 25px;
+        }
+        footer::before { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.5); z-index:0; }
+        footer .container { position:relative; z-index:1; }
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-wrap: wrap;
+        }
+        .footer-brand .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .footer-brand .logo-image {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(215,173,69,.65);
+            box-shadow: 0 0 20px rgba(215,173,69,.15);
+            transition: .4s;
+        }
+        .footer-brand .logo:hover .logo-image {
+            transform: scale(1.06) rotate(3deg);
+        }
+        .footer-brand .logo-name {
+            font-size: 17px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .footer-brand .logo-name span {
+            display: block;
+            color: var(--gold);
+            font-size: 9px;
+            letter-spacing: 3px;
+            margin-top: 3px;
+        }
+        .footer-text {
+            color: #ccc;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.05);
+            color: #ddd;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        .footer-social a:hover {
+            background: var(--gold);
+            color: #111;
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(215,173,69,0.2);
+        }
+        /* Platform-specific hover colors in footer */
+        .footer-social a:hover .fa-spotify { color: #1DB954; }
+        .footer-social a:hover .fa-apple { color: #fff; }
+        .footer-social a:hover .fa-facebook { color: #1877F2; }
+        .footer-social a:hover .fa-music { color: #FF6B6B; }
+        .footer-social a:hover .fa-globe { color: #FFA500; }
+
+        .copyright {
+            padding-top: 25px;
+            color: #aaa;
+            font-size: 10px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* ── TOASTS ── */
+        .floating-toast {
+            position:fixed; bottom:30px; right:30px; z-index:10001;
+            max-width:380px; background:rgba(10,13,11,.96); backdrop-filter:blur(20px);
+            border:1px solid rgba(215,173,69,.4); border-radius:16px;
+            padding:16px 20px; box-shadow:0 20px 60px rgba(0,0,0,.6);
+            transform:translateY(120%); opacity:0; transition:.5s;
+            display:flex; align-items:center; gap:14px; cursor:pointer;
+        }
+        .floating-toast.show { transform:translateY(0); opacity:1; }
+        .floating-toast .icon { flex:none; width:44px; height:44px; display:grid; place-items:center; border-radius:50%; background:rgba(215,173,69,.15); color:var(--gold); font-size:18px; }
+        .floating-toast .content { flex:1; }
+        .floating-toast .content small { color:var(--gold); font-size:9px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; }
+        .floating-toast .content strong { display:block; font-size:14px; margin:3px 0; }
+        .floating-toast .content span { font-size:11px; color:#888; }
+        .close-btn { background:none; border:none; color:#666; cursor:pointer; font-size:18px; padding:4px; }
+
+        .welcome-toast {
+            position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-120px);
+            z-index:10002; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);
+            border:1px solid rgba(215,173,69,0.2); border-radius:40px;
+            padding:8px 20px; box-shadow:0 8px 30px rgba(0,0,0,0.3);
+            display:flex; align-items:center; gap:12px;
+            transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .5s ease;
+            opacity:0; pointer-events:none; max-width:90%;
+        }
+        .welcome-toast.show { transform:translateX(-50%) translateY(0); opacity:1; pointer-events:auto; }
+        .welcome-toast .icon { flex:none; width:28px; height:28px; display:grid; place-items:center; border-radius:50%; background:rgba(215,173,69,0.15); color:var(--gold); font-size:14px; }
+        .welcome-toast .content { display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; white-space:nowrap; }
+        .welcome-toast .content strong { font-size:13px; font-weight:700; color:#fff; }
+        .welcome-toast .content span { font-size:12px; color:#aaa; }
+        .welcome-toast .close-btn { background:none; border:none; color:#666; font-size:16px; cursor:pointer; padding:0 0 0 4px; transition:color .2s; }
+        .welcome-toast .close-btn:hover { color:#fff; }
+
+        /* ── REVEAL ── */
+        .reveal { opacity:0; transform:translateY(35px); transition:opacity .8s,transform .8s; }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:1050px){ .nav-links{gap:18px;} .video-grid{grid-template-columns:repeat(2,1fr);} .news .news-grid{grid-template-columns:repeat(2,1fr);} }
+        @media(max-width:950px){ .nav-links{display:none} .nav-right{gap:8px} .hero-content{padding-top:80px} .hero h1{font-size:62px} .stats-grid{grid-template-columns:repeat(2,1fr)} .stat:nth-child(2){border-right:0} .video-grid{grid-template-columns:1fr 1fr;} .about-grid,.contact-grid{grid-template-columns:1fr} .about-photo{height:400px} .back-to-top{bottom:20px;left:20px;width:48px;height:48px;font-size:18px} .news-sidebar-wrapper{grid-template-columns:1fr;} .sidebar{position:static;} }
+        @media(max-width:680px){ .video-grid{grid-template-columns:1fr;gap:22px;} .news .news-grid{grid-template-columns:1fr;gap:22px;} .play{width:60px;height:60px;font-size:20px;} .video-info{padding:18px 20px 22px;} .video-info h3{font-size:17px;} .news .news-item img{height:160px;} }
+        @media(max-width:600px){ .navbar{min-height:72px} .logo-image{width:42px;height:42px} .logo-name{font-size:14px} .hero{min-height:780px} .hero h1{font-size:54px} .language-line{font-size:15px} .hero-description{font-size:15px;line-height:1.7} .buttons{flex-direction:column;align-items:flex-start} .btn{width:100%} .hero-progress{right:20px;width:100px} .hero-song-label{bottom:65px;max-width:90%;overflow:hidden;text-overflow:ellipsis} .stats{margin-top:-20px} .stats-grid{grid-template-columns:repeat(2,1fr)} .stat{padding:22px 10px} section:not(.hero){padding:75px 0} .about-grid{padding:25px;gap:30px;} .about-photo{height:300px} .contact-intro,.contact-form-box{padding:25px} .contact-cards{grid-template-columns:1fr} .form-grid{grid-template-columns:1fr} .field.full{grid-column:auto} .footer-top{flex-direction:column;align-items:center;text-align:center;} .footer-social{justify-content:center;} .notification-panel{right:-55px;width:290px} .ministry-logo{width:125px;height:125px} .identity h2{font-size:38px} .video-modal{padding:10px} .video-modal-box{border-radius:14px} .video-modal-info{padding:16px} .video-modal-info h3{font-size:23px} .floating-toast,.welcome-toast{max-width:calc(100% - 30px)} .back-to-top{bottom:15px;left:15px;width:44px;height:44px;font-size:16px} .welcome-toast{top:15px;left:15px;transform:translateY(-150px);padding:6px 14px;border-radius:30px;} .welcome-toast.show{transform:translateY(0);} .welcome-toast .content strong{font-size:12px;} .welcome-toast .content span{font-size:11px;} .welcome-toast .icon{width:24px;height:24px;font-size:12px;} }
+        @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important} }
+    </style>
+</head>
+<body>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><span class="arrow">↑</span></button>
+
+    <!-- HEADER -->
+    <header id="siteHeader">
+        <div class="container navbar">
+            <a href="#home" class="logo">
+                <img class="logo-image" src="https://i.postimg.cc/dtp1VnDR/Gemini-Generated-Image-q4zen2q4zen2q4ze.jpg" alt="Hyssop Choir">
+                <div class="logo-name">HYSSOP <span>CHOIR • RWANDA</span></div>
+            </a>
+            <div class="nav-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#videos">Videos</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#news">News</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#identity">Ministry</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <div class="notification-wrapper">
+                        <button class="notification-btn" id="notificationBtn" aria-label="Notifications">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="notification-count" id="notificationCount">0</span>
+                        </button>
+                        <div class="notification-panel" id="notificationPanel">
+                            <div class="notification-panel-title">
+                                <strong>Notifications</strong>
+                                <span class="notif-status" id="notifStatus">
+                                    <span class="dot"></span> Live
+                                </span>
+                            </div>
+                            <div class="notif-list" id="notificationList">
+                                <div class="notif-empty">Loading...</div>
+                            </div>
+                            <div class="notif-actions-all">
+                                <button id="markAllReadBtn">Mark all as read</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODERN COMPACT WELCOME TOAST -->
+    <div class="welcome-toast" id="welcomeToast">
+        <div class="icon"><i class="fa-regular fa-hand-peace"></i></div>
+        <div class="content">
+            <strong>Welcome to Hyssop</strong>
+            <span>Faith. Worship. Music.</span>
+        </div>
+        <button class="close-btn" id="welcomeToastClose">&times;</button>
+    </div>
+
+    <!-- FLOATING TOAST (YouTube) -->
+    <div class="floating-toast" id="floatingToast">
+        <div class="icon"><i class="fa-brands fa-youtube"></i></div>
+        <div class="content">
+            <small>HYSSOP CHOIR</small>
+            <strong id="toastTitle">New Video Uploaded!</strong>
+            <span id="toastDesc">Click to watch now</span>
+        </div>
+        <button class="close-btn" id="toastCloseBtn">×</button>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-slides">
+            <div class="hero-slide active" data-title="ISOOKO"></div>
+            <div class="hero-slide" data-title="UBUKI"></div>
+            <div class="hero-slide" data-title="MUTIMA WANJYE"></div>
+            <div class="hero-slide" data-title="NTABWOBA"></div>
+            <div class="hero-slide" data-title="HYSSOP CHOIR"></div>
+            <div class="hero-slide" data-title="HYSSOP WORSHIP"></div>
+            <div class="hero-slide" data-title="HYSSOP GOSPEL"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="eyebrow">KIGALI • RWANDA • GOSPEL</div>
+                <h1>Faith in<br><span>Harmony.</span></h1>
+                <div class="language-line"><span id="typedLanguage"></span><span class="cursor"></span></div>
+                <p class="hero-description">Welcome to Hyssop Choir — a gospel ministry from Rwanda using heartfelt music and worship to inspire faith, touch lives and glorify God.</p>
+                <div class="buttons">
+                    <a href="#videos" class="btn btn-gold"><i class="fa-solid fa-play"></i> Watch Our Music</a>
+                    <a href="https://www.youtube.com/@hyssopchoir" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fa-brands fa-youtube"></i> Official YouTube</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-song-label" id="heroSongLabel">ISOOKO</div>
+        <div class="hero-progress"><div class="hero-progress-bar" id="heroProgressBar"></div></div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat reveal"><strong>2004</strong><span>Founded as a student choir</span></div>
+                <div class="stat reveal"><strong>Kigali</strong><span>Rwanda</span></div>
+                <div class="stat reveal"><strong>Gospel</strong><span>Worship Ministry</span></div>
+                <div class="stat reveal"><strong>100+</strong><span>YouTube Videos</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIDEOS -->
+    <section class="videos" id="videos">
+        <div class="container">
+            <div class="section-title center reveal">
+                <small>OFFICIAL MUSIC</small>
+                <h2>Hear the Ministry.</h2>
+                <p>Experience Hyssop Choir through worship, gospel music and live performances.</p>
+            </div>
+            <div class="video-grid">
+                <article class="video-card reveal" data-video="ZGcBpRZNLco" data-title="ISOOKO" data-description="Hyssop Choir • Zamar Concert">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/ZGcBpRZNLco/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/ZGcBpRZNLco/hqdefault.jpg" alt="Hyssop Choir Isooko" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Official</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>ISOOKO</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Hyssop Choir • Zamar Concert</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="EDneB4Bc7VQ" data-title="UBUKI" data-description="Hyssop Choir official music">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/EDneB4Bc7VQ/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/EDneB4Bc7VQ/hqdefault.jpg" alt="Hyssop Choir Ubuki" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Official</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>UBUKI</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Hyssop Choir official music</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="LOMrGCeZNBs" data-title="MUTIMA WANJYE" data-description="Hyssop Choir • Zamar Concert">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/LOMrGCeZNBs/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/LOMrGCeZNBs/hqdefault.jpg" alt="Hyssop Choir Mutima Wanjye" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Live</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>MUTIMA WANJYE</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Zamar Concert performance</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="xvYhwmNcOug" data-title="NTABWOBA" data-description="Hyssop Choir official music">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/xvYhwmNcOug/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/xvYhwmNcOug/hqdefault.jpg" alt="Hyssop Choir Ntabwoba" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Official</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>NTABWOBA</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Hyssop Choir official music</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="d8Xluj12FBI" data-title="IYO NTAMA" data-description="Hyssop Choir • Official Video 2024">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/d8Xluj12FBI/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/d8Xluj12FBI/hqdefault.jpg" alt="Hyssop Choir Iyo Ntama" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">2024</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>IYO NTAMA</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Official video • 2024</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="pH6HHbDzS5A" data-title="UBUNTU BW'IMANA 105" data-description="Hyssop Choir ft Nazir Choir • El Rachum 3">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/pH6HHbDzS5A/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/pH6HHbDzS5A/hqdefault.jpg" alt="Hyssop Choir Ubuntu bw Imana" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Collab</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>UBUNTU BW'IMANA 105</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Hyssop Choir ft Nazir Choir • El Rachum 3</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="6PAVE4hITwQ" data-title="IMBABAZI Z'UMUKIZA 104" data-description="Hyssop Choir • Gospel">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/6PAVE4hITwQ/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/6PAVE4hITwQ/hqdefault.jpg" alt="Hyssop Choir Imbabazi z Umukiza" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Gospel</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>IMBABAZI Z'UMUKIZA 104</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Hyssop Choir • Gospel</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="Av02ksdp5y4" data-title="ZABURI 150" data-description="Hyssop Choir • Live Music Video">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/Av02ksdp5y4/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/Av02ksdp5y4/hqdefault.jpg" alt="Hyssop Choir Zaburi 150" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Live</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>ZABURI 150</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Hyssop Choir • Live Music Video</p>
+                    </div>
+                </article>
+                <article class="video-card reveal" data-video="LVzhRiyMXaE" data-title="NUHAGIWE" data-description="Hyssop Choir • Official Video">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/LVzhRiyMXaE/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/LVzhRiyMXaE/hqdefault.jpg" alt="Hyssop Choir Nuhagiwe" loading="lazy">
+                        <div class="play"><i class="fa-solid fa-play"></i></div>
+                        <span class="video-badge">Official</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>NUHAGIWE</h3>
+                        <p><i class="fa-regular fa-circle-play"></i> Hyssop Choir • Zamar Concert</p>
+                    </div>
+                </article>
+            </div>
+            <div class="view-more-wrapper reveal">
+                <a href="https://www.youtube.com/@hyssopchoir/videos" target="_blank" rel="noopener noreferrer" class="view-more-btn">
+                    <i class="fa-brands fa-youtube"></i> View More Videos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-photo reveal">
+                    <div class="about-slide active"><img src="https://i.postimg.cc/SQL782cf/Gemini-Generated-Image-u7s6pyu7s6pyu7s6-(1).jpg" alt="Hyssop Choir Rwanda"></div>
+                    <div class="about-slide"><img src="https://i.postimg.cc/vTXVKnvf/Gemini-Generated-Image-7uhrsm7uhrsm7uhr-(1).jpg" alt="Hyssop Choir worship"></div>
+                    <div class="about-slide"><img src="https://i.postimg.cc/wBJspZVH/Gemini-Generated-Image-4e32sw4e32sw4e32-(1).jpg" alt="Hyssop Choir gospel"></div>
+                    <div class="about-slide"><img src="https://i.postimg.cc/zfn3MWzb/Gemini-Generated-Image-9kkvpi9kkvpi9kkv.jpg" alt="Hyssop Choir ministry"></div>
+                </div>
+                <div class="about-text reveal">
+                    <div class="eyebrow">ABOUT HYSSOP</div>
+                    <h2>A ministry built <span>through music.</span></h2>
+                    <p>Hyssop Choir is a gospel choir from Rwanda whose ministry is centered on worship, gospel music and sharing the message of Jesus Christ.</p>
+                    <p>The choir began in 2004 as a student choir and continued to grow in its music, ministry and gospel work.</p>
+                    <div class="quote">"Faith • Growth • Worship • Ministry"</div>
+                    <a href="https://www.youtube.com/@hyssopchoir" target="_blank" rel="noopener noreferrer" class="btn btn-gold"><i class="fa-brands fa-youtube"></i> Visit Official Channel</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWS WITH SIDEBAR -->
+    <section class="news" id="news">
+        <div class="container">
+            <div class="section-title center reveal">
+                <small>LATEST UPDATES</small>
+                <h2>News & <span style="color:var(--gold);">Announcements</span></h2>
+                <p>Stay informed about what's happening with Hyssop Choir.</p>
+            </div>
+            <div class="news-sidebar-wrapper">
+                <!-- Left: News Grid -->
+                <div>
+                    <div id="newsContainer">
+                        <div class="empty">Loading news...</div>
+                    </div>
+                </div>
+                <!-- Right: Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-card">
+                        <h3>Follow <span>Us</span></h3>
+                        <p class="sub">Stay connected on social media</p>
+                        <div class="social-icons">
+                            <a href="https://open.spotify.com/track/4ox5JB3NAlgExu6D486Ykb" target="_blank" rel="noopener noreferrer" aria-label="Spotify">
+                                <i class="fa-brands fa-spotify"></i>
+                            </a>
+                            <a href="https://music.apple.com/ug/artist/hyssop-choir/1717205403" target="_blank" rel="noopener noreferrer" aria-label="Apple Music">
+                                <i class="fa-brands fa-apple"></i>
+                            </a>
+                            <a href="https://audiomack.com/hyssopchoir" target="_blank" rel="noopener noreferrer" aria-label="Audiomack">
+                                <i class="fa-solid fa-music"></i>
+                            </a>
+                            <a href="https://www.facebook.com/hyssopchoirII/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                                <i class="fa-brands fa-facebook"></i>
+                            </a>
+                            <a href="https://www.ceenaija.com/hyssop-choir-iyo-ntama/" target="_blank" rel="noopener noreferrer" aria-label="Ceenaija">
+                                <i class="fa-solid fa-globe"></i>
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-title center reveal">
+                <small>CONTACT HYSSOP</small>
+                <h2>Let's connect.</h2>
+                <p>For ministry support, invitations, ideas, collaborations or general communication, contact Hyssop Choir directly.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-intro reveal">
+                    <div class="eyebrow">GET IN TOUCH</div>
+                    <h2>Talk to <span>Hyssop.</span></h2>
+                    <p>Reach the choir directly by email, telephone or WhatsApp.</p>
+                    <div class="contact-cards">
+                        <div class="contact-card">
+                            <div class="contact-card-icon"><i class="fa-solid fa-envelope"></i></div>
+                            <small>Email</small>
+                            <strong><a href="mailto:hyssopchoirfamily@gmail.com">hyssopchoirfamily@gmail.com</a></strong>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-icon"><i class="fa-solid fa-phone"></i></div>
+                            <small>Telephone</small>
+                            <strong><a href="tel:+250788784483">+250 788 784 483</a></strong>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-icon"><i class="fa-solid fa-phone"></i></div>
+                            <small>Telephone</small>
+                            <strong><a href="tel:+250788209292">+250 788 209 292</a></strong>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                            <small>WhatsApp</small>
+                            <strong><a href="https://wa.me/250788784483" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></strong>
+                        </div>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="mailto:hyssopchoirfamily@gmail.com" class="contact-action"><i class="fa-solid fa-envelope"></i> Email</a>
+                        <a href="tel:+250788784483" class="contact-action"><i class="fa-solid fa-phone"></i> Call</a>
+                        <a href="https://wa.me/250788784483" target="_blank" rel="noopener noreferrer" class="contact-action"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    </div>
+                </div>
+                <div class="contact-form-box reveal">
+                    <h3>Send a message</h3>
+                    <p>This form opens your email application, so no backend or database is required.</p>
+                    <form id="contactForm">
+                        <div class="form-grid">
+                            <div class="field">
+                                <label>Your name</label>
+                                <input type="text" id="contactName" placeholder="Your name" required>
+                            </div>
+                            <div class="field">
+                                <label>Your email</label>
+                                <input type="email" id="contactEmail" placeholder="you@example.com" required>
+                            </div>
+                            <div class="field full">
+                                <label>Subject</label>
+                                <input type="text" id="contactSubject" placeholder="How can we help?" required>
+                            </div>
+                            <div class="field full">
+                                <label>Message</label>
+                                <textarea id="contactMessage" placeholder="Write your message..." required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-gold form-submit"><i class="fa-solid fa-paper-plane"></i> SEND MESSAGE</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IDENTITY -->
+    <section class="identity" id="identity">
+        <div class="container">
+            <img class="ministry-logo" src="https://i.postimg.cc/dtp1VnDR/Gemini-Generated-Image-q4zen2q4zen2q4ze.jpg" alt="HYSSOP CHOIR Rwanda">
+            <div class="eyebrow">OUR MINISTRY</div>
+            <h2>HYSSOP <span>CHOIR</span></h2>
+            <p>FAITH • GROWTH • WORSHIP • MINISTRY</p>
+            <div class="identity-buttons">
+                <a href="https://www.youtube.com/@hyssopchoir" target="_blank" rel="noopener noreferrer" class="btn btn-gold"><i class="fa-brands fa-youtube"></i> YouTube Channel</a>
+                <a href="https://www.instagram.com/hyssop_choir" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fa-brands fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#home" class="logo">
+                        <img class="logo-image" src="https://i.postimg.cc/dtp1VnDR/Gemini-Generated-Image-q4zen2q4zen2q4ze.jpg" alt="Hyssop Choir">
+                        <div class="logo-name">HYSSOP <span>CHOIR • RWANDA</span></div>
+                    </a>
+                    <p class="footer-text">Gospel music and worship from Rwanda.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://open.spotify.com/track/4ox5JB3NAlgExu6D486Ykb" target="_blank" rel="noopener noreferrer" aria-label="Spotify">
+                        <i class="fa-brands fa-spotify"></i>
+                    </a>
+                    <a href="https://music.apple.com/ug/artist/hyssop-choir/1717205403" target="_blank" rel="noopener noreferrer" aria-label="Apple Music">
+                        <i class="fa-brands fa-apple"></i>
+                    </a>
+                    <a href="https://audiomack.com/hyssopchoir" target="_blank" rel="noopener noreferrer" aria-label="Audiomack">
+                        <i class="fa-solid fa-music"></i>
+                    </a>
+                    <a href="https://www.facebook.com/hyssopchoirII/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a href="https://www.ceenaija.com/hyssop-choir-iyo-ntama/" target="_blank" rel="noopener noreferrer" aria-label="Ceenaija">
+                        <i class="fa-solid fa-globe"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@hyssopchoir" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                    <a href="https://www.instagram.com/hyssop_choir" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/250788784483" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                    <a href="mailto:hyssopchoirfamily@gmail.com" aria-label="Email">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="copyright">© 2026 HYSSOP CHOIR RWANDA. ALL RIGHTS RESERVED.</div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        // ── BACK TO TOP ──
+        const backToTopBtn = document.getElementById("backToTop");
+        window.addEventListener("scroll", function() {
+            if (window.scrollY > 300) { backToTopBtn.classList.add("visible"); } else { backToTopBtn.classList.remove("visible"); }
+        });
+        backToTopBtn.addEventListener("click", function() { window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+        // ── LANGUAGE TYPING ──
+        const languages = [
+            "Worship that inspires faith.",
+            "Une adoration qui inspire la foi.",
+            "Kuramya gutera kwizera.",
+            "Gospel that transforms lives.",
+            "Music that heals souls.",
+            "Praise that lifts hearts."
+        ];
+        const typedLanguage = document.getElementById("typedLanguage");
+        let langIdx = 0, charIdx = 0, deleting = false;
+        function typeLanguage() {
+            const current = languages[langIdx];
+            if (!deleting) {
+                typedLanguage.textContent = current.substring(0, charIdx + 1);
+                charIdx++;
+                if (charIdx === current.length) { deleting = true; setTimeout(typeLanguage, 1800); return; }
+            } else {
+                typedLanguage.textContent = current.substring(0, charIdx - 1);
+                charIdx--;
+                if (charIdx === 0) { deleting = false; langIdx = (langIdx + 1) % languages.length; }
+            }
+            setTimeout(typeLanguage, deleting ? 45 : 75);
+        }
+        typeLanguage();
+
+        // ── HEADER SCROLL ──
+        const siteHeader = document.getElementById("siteHeader");
+        window.addEventListener("scroll", function() { siteHeader.classList.toggle("scrolled", window.scrollY > 40); });
+
+        // ── ACTIVE NAV ──
+        const sections = document.querySelectorAll("section[id]");
+        const navLinks = document.querySelectorAll(".nav-links a");
+        window.addEventListener("scroll", function() {
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.offsetHeight;
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) { current = section.getAttribute("id"); }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+                if (link.getAttribute("href") === "#" + current) { link.classList.add("active"); }
+            });
+        });
+
+        // ── SCROLL REVEAL ──
+        const revealElements = document.querySelectorAll(".reveal");
+        if ("IntersectionObserver" in window) {
+            const revealObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add("visible"); revealObserver.unobserve(entry.target); } });
+            }, { threshold: .12 });
+            revealElements.forEach(element => revealObserver.observe(element));
+        } else { revealElements.forEach(element => element.classList.add("visible")); }
+
+        // ── HERO SLIDER ──
+        const heroSlides = document.querySelectorAll(".hero-slide");
+        const heroSongLabel = document.getElementById("heroSongLabel");
+        const heroProgressBar = document.getElementById("heroProgressBar");
+        let heroIdx = 0;
+        const HERO_TIME = 5000;
+        function restartHeroProgress() {
+            heroProgressBar.style.transition = "none";
+            heroProgressBar.style.width = "0%";
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    heroProgressBar.style.transition = "width 5s linear";
+                    heroProgressBar.style.width = "100%";
+                });
+            });
+        }
+        function showHeroSlide(index) {
+            if (index >= heroSlides.length) { index = 0; }
+            heroIdx = index;
+            heroSlides.forEach((slide, i) => { slide.classList.toggle("active", i === heroIdx); });
+            heroSongLabel.textContent = heroSlides[heroIdx].dataset.title;
+            restartHeroProgress();
+        }
+        restartHeroProgress();
+        setInterval(() => showHeroSlide(heroIdx + 1), HERO_TIME);
+
+        // ── ABOUT SLIDER ──
+        const aboutSlides = document.querySelectorAll(".about-slide");
+        let aboutIdx = 0;
+        setInterval(() => {
+            if (!aboutSlides.length) return;
+            aboutSlides[aboutIdx].classList.remove("active");
+            aboutIdx = (aboutIdx + 1) % aboutSlides.length;
+            aboutSlides[aboutIdx].classList.add("active");
+        }, 5000);
+
+        // ── VIDEO IMAGE FALLBACK ──
+        document.querySelectorAll(".video-thumbnail img").forEach(image => {
+            image.addEventListener("error", function() {
+                const fallback = this.dataset.fallback;
+                if (fallback && this.src !== fallback) { this.src = fallback; }
+            });
+        });
+
+        // ── VIDEO CLICK: OPEN DIRECTLY ON YOUTUBE ──
+        const videoCards = document.querySelectorAll(".video-card[data-video]");
+        videoCards.forEach(card => {
+            card.addEventListener("click", function() {
+                const videoId = this.dataset.video;
+                if (videoId) {
+                    const url = "https://www.youtube.com/watch?v=" + videoId;
+                    window.open(url, "_blank", "noopener,noreferrer");
+                }
+            });
+        });
+
+        // ── CONTACT FORM ──
+        document.getElementById("contactForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const name = document.getElementById("contactName").value.trim();
+            const email = document.getElementById("contactEmail").value.trim();
+            const subject = document.getElementById("contactSubject").value.trim();
+            const message = document.getElementById("contactMessage").value.trim();
+            const body = "Hello Hyssop Choir,\n\nName: " + name + "\nEmail: " + email + "\n\n" + message;
+            const mailto = "mailto:hyssopchoirfamily@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+            window.location.href = mailto;
+        });
+
+        // ── NOTIFICATION SYSTEM (Backend) ──
+        let allNotifications = [];
+        let isNotificationChecking = false;
+
+        async function fetchNotifications() {
+            try {
+                const res = await fetch('/api/notifications');
+                const data = await res.json();
+                allNotifications = data;
+                renderNotifications();
+                updateNotificationBadge();
+            } catch (e) {
+                console.error('Failed to load notifications:', e);
+            }
+        }
+
+        function updateNotificationBadge() {
+            const unread = allNotifications.filter(n => !n.read).length;
+            const countEl = document.getElementById('notificationCount');
+            if (unread > 0) {
+                countEl.textContent = unread;
+                countEl.classList.add('show');
+            } else {
+                countEl.classList.remove('show');
+            }
+        }
+
+        function renderNotifications() {
+            const list = document.getElementById('notificationList');
+            if (!allNotifications.length) {
+                list.innerHTML = `<div class="notif-empty">No notifications yet.</div>`;
+                return;
+            }
+            let html = '';
+            allNotifications.forEach(n => {
+                const unreadClass = n.read ? '' : 'unread';
+                const date = new Date(n.created_at);
+                const timeAgo = timeSince(date);
+                const icon = n.type === 'youtube' ? 'fa-brands fa-youtube' : 'fa-regular fa-bullhorn';
+                html += `
+                    <div class="notif-item ${unreadClass}">
+                        <div class="notif-icon"><i class="${icon}"></i></div>
+                        <div class="notif-content">
+                            <strong>${n.title}</strong>
+                            <p>${n.message}</p>
+                            <div class="notif-time">${timeAgo}</div>
+                            <div class="notif-actions">
+                                ${!n.read ? `<button class="mark-read-btn" data-id="${n.id}">Mark read</button>` : ''}
+                                <button class="delete-notif-btn" data-id="${n.id}">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+
+            list.querySelectorAll('.mark-read-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    await fetch('/api/notifications/read', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    fetchNotifications();
+                });
+            });
+
+            list.querySelectorAll('.delete-notif-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    if (confirm('Delete this notification?')) {
+                        await fetch(`/api/notifications/${id}`, { method: 'DELETE' });
+                        fetchNotifications();
+                    }
+                });
+            });
+
+            document.getElementById('markAllReadBtn').onclick = async () => {
+                await fetch('/api/notifications/read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ all: true })
+                });
+                fetchNotifications();
+            };
+        }
+
+        function timeSince(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = Math.floor(seconds / 31536000);
+            if (interval > 1) return interval + ' years ago';
+            interval = Math.floor(seconds / 2592000);
+            if (interval > 1) return interval + ' months ago';
+            interval = Math.floor(seconds / 86400);
+            if (interval > 1) return interval + ' days ago';
+            interval = Math.floor(seconds / 3600);
+            if (interval > 1) return interval + ' hours ago';
+            interval = Math.floor(seconds / 60);
+            if (interval > 1) return interval + ' minutes ago';
+            return 'Just now';
+        }
+
+        // ── Bell toggle ──
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationPanel = document.getElementById('notificationPanel');
+        notificationBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notificationPanel.classList.toggle('open');
+            if (notificationPanel.classList.contains('open')) {
+                fetchNotifications();
+            }
+        });
+        document.addEventListener('click', function(e) {
+            const wrapper = document.querySelector('.notification-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                notificationPanel.classList.remove('open');
+            }
+        });
+
+        // ── YouTube RSS ──
+        const CHANNEL_ID = "UCv5XHox3VXGgHhXGXkXJgWw";
+        const RSS_URL = "https://www.youtube.com/feeds/videos.xml?channel_id=" + CHANNEL_ID;
+        const CHECK_INTERVAL = 120000;
+        let lastVideoId = null;
+        let notificationCountValue = 0;
+
+        const notificationStatus = document.getElementById('notificationStatus');
+        const connectionStatus = document.getElementById('connectionStatus');
+
+        async function fetchRSSFeed() {
+            const proxies = [
+                "https://api.allorigins.win/raw?url=" + encodeURIComponent(RSS_URL),
+                "https://corsproxy.io/?" + encodeURIComponent(RSS_URL)
+            ];
+            for (const url of proxies) {
+                try {
+                    const response = await fetch(url, { cache: "no-store" });
+                    if (!response.ok) throw new Error("HTTP " + response.status);
+                    const text = await response.text();
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(text, "text/xml");
+                    if (xml.querySelector("parsererror")) throw new Error("XML parsing error");
+                    return xml;
+                } catch (error) { console.warn("RSS proxy failed:", error); }
+            }
+            return null;
+        }
+
+        function parseRSSFeed(xml) {
+            try {
+                const entries = xml.querySelectorAll("entry");
+                if (!entries.length) return null;
+                const firstEntry = entries[0];
+                let videoId = firstEntry.querySelector("videoId")?.textContent;
+                if (!videoId) {
+                    const links = firstEntry.querySelectorAll("link");
+                    for (const link of links) {
+                        const href = link.getAttribute("href");
+                        if (!href) continue;
+                        const match = href.match(/v=([^&]+)/);
+                        if (match) { videoId = match[1]; break; }
+                    }
+                }
+                if (!videoId) return null;
+                const title = firstEntry.querySelector("title")?.textContent || "Hyssop Choir";
+                return {
+                    id: videoId,
+                    title: title,
+                    description: "New Hyssop Choir video",
+                    published: firstEntry.querySelector("published")?.textContent || new Date().toISOString(),
+                    url: "https://www.youtube.com/watch?v=" + videoId,
+                    thumbnail: "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg"
+                };
+            } catch (error) { console.error("RSS parse error:", error); return null; }
+        }
+
+        function showNotification(video) {
+            toastTitle.textContent = video.title;
+            toastDesc.textContent = "New song/video from Hyssop Choir";
+            floatingToast.classList.add("show");
+            clearTimeout(floatingToast._timeout);
+            floatingToast._timeout = setTimeout(() => { floatingToast.classList.remove("show"); }, 10000);
+            floatingToast.onclick = function(e) {
+                if (e.target.tagName !== "BUTTON") { window.open(video.url, "_blank", "noopener,noreferrer"); floatingToast.classList.remove("show"); }
+            };
+        }
+
+        toastCloseBtn.addEventListener("click", function(e) { e.stopPropagation(); floatingToast.classList.remove("show"); });
+
+        function incrementNotificationCount() {
+            notificationCountValue++;
+            notificationCount.textContent = notificationCountValue;
+            notificationCount.classList.add("show");
+            notificationStatus.innerHTML = '<i class="fa-solid fa-bell" style="color:var(--gold);margin-right:6px;"></i> ' + notificationCountValue + ' new video' + (notificationCountValue > 1 ? "s" : "") + ' detected.';
+        }
+
+        function resetNotificationCount() {
+            notificationCountValue = 0;
+            notificationCount.textContent = "0";
+            notificationCount.classList.remove("show");
+            notificationStatus.innerHTML = '<i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:6px;"></i> Monitoring Hyssop Choir for new videos...';
+        }
+
+        async function checkForNewVideos() {
+            if (isNotificationChecking) return;
+            isNotificationChecking = true;
+            try {
+                const xml = await fetchRSSFeed();
+                if (!xml) { updateConnectionStatus("disconnected"); notificationStatus.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color:#e74c3c;margin-right:6px;"></i> Unable to check YouTube right now. Retrying...'; return; }
+                const video = parseRSSFeed(xml);
+                if (!video) { updateConnectionStatus("disconnected"); return; }
+                updateConnectionStatus("connected");
+                notificationStatus.innerHTML = '<i class="fa-solid fa-check-circle" style="color:#2ecc71;margin-right:6px;"></i> Connected • Last checked ' + new Date().toLocaleTimeString();
+                if (lastVideoId && lastVideoId !== video.id) {
+                    showNotification(video);
+                    incrementNotificationCount();
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        new Notification("🎵 HYSSOP CHOIR", { body: "New video: " + video.title, icon: video.thumbnail });
+                    }
+                }
+                lastVideoId = video.id;
+            } catch (error) { console.error("Notification check error:", error); updateConnectionStatus("disconnected"); } finally { isNotificationChecking = false; }
+        }
+
+        function updateConnectionStatus(status) {
+            connectionStatus.className = "status " + status;
+            connectionStatus.innerHTML = status === "connected" ? '<span class="dot"></span> Live' : '<span class="dot"></span> Checking...';
+        }
+
+        // ── WELCOME TOAST (auto‑dismiss after 4s) ──
+        const welcomeToast = document.getElementById("welcomeToast");
+        const welcomeClose = document.getElementById("welcomeToastClose");
+        function showWelcomeToast() {
+            welcomeToast.classList.add("show");
+            clearTimeout(welcomeToast._timeout);
+            welcomeToast._timeout = setTimeout(() => { welcomeToast.classList.remove("show"); }, 4000);
+        }
+        setTimeout(showWelcomeToast, 800);
+        welcomeClose.addEventListener("click", function(e) {
+            e.stopPropagation();
+            welcomeToast.classList.remove("show");
+            clearTimeout(welcomeToast._timeout);
+        });
+        welcomeToast.addEventListener("click", function(e) {
+            if (e.target === welcomeToast) {
+                welcomeToast.classList.remove("show");
+                clearTimeout(welcomeToast._timeout);
+            }
+        });
+
+        // ── LOAD FRONTEND NEWS ──
+        async function loadFrontendNews() {
+            const container = document.getElementById('newsContainer');
+            if (!container) return;
+            try {
+                const res = await fetch('/api/news');
+                const news = await res.json();
+                if (!news || !news.length) {
+                    container.innerHTML = '<div class="empty">No news yet. Check back later.</div>';
+                    return;
+                }
+                let html = '<div class="news-grid">';
+                news.forEach(item => {
+                    const title = item.title || 'Untitled';
+                    const content = item.content || item.body || 'No content available.';
+                    const imageHtml = item.image_url ? `<img src="${item.image_url}" alt="${title}" />` : '';
+                    const date = new Date(item.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    html += `
+                        <div class="news-item">
+                            ${imageHtml}
+                            <div class="body">
+                                <h3>${title}</h3>
+                                <p>${content}</p>
+                                <div class="date"><i class="fa-regular fa-calendar"></i> ${date}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading news:', error);
+                container.innerHTML = '<div class="empty">Could not load news. Please try again later.</div>';
+            }
+        }
+
+        // ── INIT ──
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFrontendNews();
+            fetchNotifications();
+        });
+
+        // ── YouTube RSS Monitor ──
+        checkForNewVideos();
+        setInterval(checkForNewVideos, CHECK_INTERVAL);
+        document.addEventListener("visibilitychange", function() { if (!document.hidden) { checkForNewVideos(); } });
+
+        console.log("🎵 HYSSOP CHOIR website loaded");
+        console.log("📡 YouTube notification monitor active");
+    </script>
+
+</body>
+</html>
